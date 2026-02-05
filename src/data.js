@@ -2,6 +2,7 @@ const data = [
   {
     section: 'FULL TUNING',
     attributes: [
+      { id: 'carro_full_blindagem', name: 'Carro (com blindagem)', levels: [{ label: '380k', value: 380 }] },
       { id: 'carro_full', name: 'Carro (sem blindagem)', levels: [{ label: '280k', value: 280 }] },
       { id: 'moto_full', name: 'Moto (sem suspensão)', levels: [{ label: '220k', value: 220 }] },
     ]
@@ -60,19 +61,7 @@ const data = [
       }
     ]
   },
-  {
-    section: 'EMBELEZAMENTO INTERNO',
-    attributes: [
-      { id: 'volante', name: 'Volante', levels: [{ label: '20k', value: 20 }] },
-      { id: 'cambio', name: 'Câmbio', levels: [{ label: '20k', value: 20 }] },
-      { id: 'ponteiros', name: 'Ponteiros', levels: [{ label: '20k', value: 20 }] },
-      { id: 'enfeites', name: 'Enfeites', levels: [{ label: '50k', value: 50 }] },
-      { id: 'placas_internas', name: 'Placas internas', levels: [{ label: '30k', value: 30 }] },
-      { id: 'design_interno', name: 'Design interno', levels: [{ label: '15k', value: 15 }] },
-      { id: 'som', name: 'Som', levels: [{ label: '5k', value: 5 }] },
-      { id: 'porta_malas', name: 'Porta-malas', levels: [{ label: '10k', value: 10 }] },
-    ]
-  },
+
   {
     section: 'EMBELEZAMENTO EXTERNO',
     attributes: [
@@ -96,6 +85,20 @@ const data = [
       { id: 'drift', name: 'Drift', levels: [{ label: '8k', value: 8 }] },
       { id: 'fumaca', name: 'Fumaça', levels: [{ label: '1k', value: 1 }] },
       { id: 'rodas_completo', name: 'Rodas completo', levels: [{ label: '50k', value: 50 }] },
+    ]
+  },
+
+  {
+    section: 'EMBELEZAMENTO INTERNO',
+    attributes: [
+      { id: 'volante', name: 'Volante', levels: [{ label: '20k', value: 20 }] },
+      { id: 'cambio', name: 'Câmbio', levels: [{ label: '20k', value: 20 }] },
+      { id: 'ponteiros', name: 'Ponteiros', levels: [{ label: '20k', value: 20 }] },
+      { id: 'enfeites', name: 'Enfeites', levels: [{ label: '50k', value: 50 }] },
+      { id: 'placas_internas', name: 'Placas internas', levels: [{ label: '30k', value: 30 }] },
+      { id: 'design_interno', name: 'Design interno', levels: [{ label: '15k', value: 15 }] },
+      { id: 'som', name: 'Som', levels: [{ label: '5k', value: 5 }] },
+      { id: 'porta_malas', name: 'Porta-malas', levels: [{ label: '10k', value: 10 }] },
     ]
   }
 ]

@@ -1,19 +1,19 @@
-import React, {useState, useMemo, useEffect, useRef} from 'react'
+import React, { useState, useMemo, useEffect, useRef } from 'react'
 import data from './data'
 import Attribute from './components/Attribute'
 import Cart from './components/Cart'
 
-export default function App(){
+export default function App() {
   const [selections, setSelections] = useState({})
 
   const handleChange = (id, index) => {
-    setSelections(prev => ({...prev, [id]: index}))
+    setSelections(prev => ({ ...prev, [id]: index }))
   }
 
   const findAttr = (id) => {
-    for(const sec of data){
-      for(const a of sec.attributes){
-        if(a.id === id) return a
+    for (const sec of data) {
+      for (const a of sec.attributes) {
+        if (a.id === id) return a
       }
     }
     return null
@@ -21,17 +21,17 @@ export default function App(){
 
   const total = useMemo(() => {
     let sum = 0
-    for(const [id, val] of Object.entries(selections)){
-      if(val === null || typeof val === 'undefined') continue
+    for (const [id, val] of Object.entries(selections)) {
+      if (val === null || typeof val === 'undefined') continue
       const a = findAttr(id)
-      if(!a) continue
-      if(a.repeatable){
+      if (!a) continue
+      if (a.repeatable) {
         const count = Number(val) || 0
         const level = a.levels[0]
-        if(level) sum += level.value * count
+        if (level) sum += level.value * count
       } else {
         const level = a.levels[val]
-        if(level) sum += level.value
+        if (level) sum += level.value
       }
     }
     return sum
@@ -42,12 +42,12 @@ export default function App(){
   // Cart state & helpers
   const [showCart, setShowCart] = useState(false)
   const cartCount = Object.entries(selections).reduce((sum, [id, val]) => {
-    if(val === null || typeof val === 'undefined') return sum
+    if (val === null || typeof val === 'undefined') return sum
     const a = findAttr(id)
-    if(a?.repeatable) return sum + (Number(val) || 0)
+    if (a?.repeatable) return sum + (Number(val) || 0)
     return sum + 1
   }, 0)
-  const removeSelection = (id) => setSelections(prev => { const next = {...prev}; delete next[id]; return next })
+  const removeSelection = (id) => setSelections(prev => { const next = { ...prev }; delete next[id]; return next })
 
   // Discount percent for the whole order (0-100)
   const [discountPercent, setDiscountPercent] = useState(0)
@@ -63,8 +63,8 @@ export default function App(){
   const tabTimeoutRef = useRef(null)
 
   const handleTabClick = (t) => {
-    if(t === activeTab) return
-    if(tabTimeoutRef.current) clearTimeout(tabTimeoutRef.current)
+    if (t === activeTab) return
+    if (tabTimeoutRef.current) clearTimeout(tabTimeoutRef.current)
     setLeaving(true)
     tabTimeoutRef.current = setTimeout(() => {
       setActiveTab(t)
@@ -75,7 +75,7 @@ export default function App(){
   }
 
   useEffect(() => {
-    return () => { if(tabTimeoutRef.current) clearTimeout(tabTimeoutRef.current) }
+    return () => { if (tabTimeoutRef.current) clearTimeout(tabTimeoutRef.current) }
   }, [])
 
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark')
@@ -93,7 +93,13 @@ export default function App(){
   const otherSections = data.filter(s => !tabs.includes(s.section))
 
   const isFull = visibleMain && visibleMain.section === 'FULL TUNING'
-  const fullSelected = isFull && (selections['carro_full'] != null || selections['moto_full'] != null)
+  const fullSelected =
+  isFull && (
+    selections['carro_full_blindagem'] != null ||
+    selections['carro_full'] != null ||
+    selections['moto_full'] != null
+  )
+
 
   return (
     <div className="app">
@@ -135,7 +141,7 @@ export default function App(){
 
       <main className="content">
         <div className="tabbar" role="tablist" aria-label="Tuning tabs">
-          {['FULL TUNING','TUNAGEM AVULSA'].map(t => (
+          {['FULL TUNING', 'TUNAGEM AVULSA'].map(t => (
             <button
               key={t}
               role="tab"
@@ -150,33 +156,56 @@ export default function App(){
 
         {visibleMain && (
           <section key={visibleMain.section} className={`section ${visibleMain.section === 'FULL TUNING' ? 'full' : ''} ${leaving ? 'fade-out' : ''} ${entering ? 'fade-in' : ''}`}>
-            <h2 className="section-title">{visibleMain.section}</h2>
             <div className="attrs">
-              {visibleMain.attributes.map((attr) => (
-                <Attribute
-                  key={attr.id}
-                  attr={attr}
-                  valueIndex={selections[attr.id]}
-                  onChange={handleChange}
-                  disabled={isFull && fullSelected && (selections[attr.id] == null || typeof selections[attr.id] === 'undefined')}
-                />
-              ))}
+              <div className="attribute">
+                <div className="attribute-header">
+                  <div className="attribute-title">
+                    <div className="title-main">{visibleMain.section}</div>
+                  </div>
+                </div>
+
+                <div className="attribute-rows">
+                  {visibleMain.attributes.map((attr) => (
+                    <Attribute
+                      key={attr.id}
+                      attr={attr}
+                      valueIndex={selections[attr.id]}
+                      onChange={handleChange}
+                      disabled={isFull && fullSelected && (selections[attr.id] == null || typeof selections[attr.id] === 'undefined')}
+                      asRow   // 👈 flag nova
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           </section>
         )}
 
         {otherSections.map((sec) => (
-          <section key={sec.section} className={`section ${sec.section === 'FULL TUNING' ? 'full' : ''}`}>
-            <h2 className="section-title">{sec.section}</h2>
+          <section
+            key={sec.section}
+            className={`section ${sec.section === 'FULL TUNING' ? 'full' : ''}`}
+          >
             <div className="attrs">
-              {sec.attributes.map((attr) => (
-                <Attribute
-                  key={attr.id}
-                  attr={attr}
-                  valueIndex={selections[attr.id]}
-                  onChange={handleChange}
-                />
-              ))}
+              <div className="attribute">
+                <div className="attribute-header">
+                  <div className="attribute-title">
+                    <div className="title-main">{sec.section}</div>
+                  </div>
+                </div>
+
+                <div className="attribute-rows">
+                  {sec.attributes.map((attr) => (
+                    <Attribute
+                      key={attr.id}
+                      attr={attr}
+                      valueIndex={selections[attr.id]}
+                      onChange={handleChange}
+                      asRow   // 👈 mesmo padrão
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           </section>
         ))}
